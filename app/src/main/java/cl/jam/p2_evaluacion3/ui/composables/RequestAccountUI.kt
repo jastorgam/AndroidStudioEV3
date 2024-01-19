@@ -72,6 +72,9 @@ fun RequestAccountUI(
     var msg by rememberSaveable { mutableStateOf<String?>(null) }
     var isDialogFrontOpen by remember { mutableStateOf(false) }
     var isDialogBackOpen by remember { mutableStateOf(false) }
+    var isDialogMessage by remember { mutableStateOf(false) }
+    var msgDialogMessage by remember { mutableStateOf("") }
+
     var isLoading by remember { mutableStateOf(false) }
     var invalidDate by remember { mutableStateOf(false) }
 
@@ -229,13 +232,7 @@ fun RequestAccountUI(
             label = { Text("Teléfono") },
             modifier = Modifier.fillMaxWidth(),
         )
-        if (thereAreMistakes) {
-            Spacer(modifier = Modifier.height(20.dp))
-            Text(
-                "Necesita llenar todos los valores",
-                color = Color.Red
-            )
-        }
+
         Spacer(modifier = Modifier.height(20.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -307,6 +304,14 @@ fun RequestAccountUI(
             CustomDialog(onDismiss = { isDialogBackOpen = false }, uri = uriBack)
         }
 
+        if (thereAreMistakes) {
+            Spacer(modifier = Modifier.height(20.dp))
+            Text(
+                "Necesita llenar todos los valores",
+                color = Color.Red
+            )
+        }
+
         Spacer(modifier = Modifier.height(20.dp))
         Button(
             onClick = {
@@ -316,8 +321,8 @@ fun RequestAccountUI(
                         birdDate.isBlank() ||
                         email.isBlank() ||
                         phone.isBlank() ||
-                        uriFront.toString().isBlank() ||
-                        uriBack.toString().isBlank();
+                        uriFront == null ||
+                        uriBack == null;
 
                 if (!thereAreMistakes) {
 
@@ -359,7 +364,8 @@ fun RequestAccountUI(
             )
         }
 
-        // Aca espara a que msg tenga algun valor
+        // Aca espara a que msg tenga algun valor retornado desde location
+        // Que se demora mucho en responder y no me guardaba los valores.
         msg?.let {
             isLoading = false
             val formatter = DateTimeFormatter.ofPattern("ddMMyyyy")
@@ -378,11 +384,24 @@ fun RequestAccountUI(
             )
 
             vm.addClient(newClient)
-            vm.clientes.forEach {
+            vm.getClients().forEach {
                 Log.v("Desde UI", "${it.id} - ${it.name}")
             }
-            msg = null
-            navToLogin()
+
+            if (msg!!.startsWith("ERROR")) {
+                msgDialogMessage = "Error al recuperar la ubicación. Se dejarán valores en 0"
+                isDialogMessage = true
+            } else {
+                msg = null
+                navToLogin()
+            }
+        }
+
+        if (isDialogMessage) {
+            CustomDialogMsg(onDismiss = {
+                isDialogMessage = false
+                navToLogin()
+            }, msg = msgDialogMessage)
         }
 
     }
@@ -433,6 +452,31 @@ fun CustomDialog(onDismiss: () -> Unit, uri: Uri?) {
             AsyncImage(model = uri, contentDescription = null)
 
             // Botón para cerrar la ventana modal
+            Button(
+                onClick = onDismiss,
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(top = 16.dp)
+            ) {
+                Text("Cerrar")
+            }
+        }
+    }
+}
+
+@Composable
+fun CustomDialogMsg(onDismiss: () -> Unit, msg: String) {
+    Dialog(
+        onDismissRequest = onDismiss,
+    ) {
+
+        Box(
+            modifier = Modifier
+                .background(Color.White)
+                .padding(16.dp)
+        ) {
+            Text(msg)
+
             Button(
                 onClick = onDismiss,
                 modifier = Modifier

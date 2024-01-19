@@ -9,7 +9,7 @@ import androidx.room.Update
 
 @Dao
 interface ClientDao {
-    @Query("SELECT * FROM client ORDER BY birdDate DESC")
+    @Query("SELECT * FROM client ORDER BY creationDate DESC")
     suspend fun getAll(): List<Client>
 
     @Query("SELECT * FROM client WHERE id = :id")

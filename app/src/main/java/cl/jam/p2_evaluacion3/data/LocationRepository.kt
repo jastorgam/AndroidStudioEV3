@@ -3,6 +3,8 @@ package cl.jam.p2_evaluacion3.data
 import android.annotation.SuppressLint
 import android.location.Location
 import android.location.LocationManager
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.Priority
 import java.util.concurrent.Executor
@@ -13,6 +15,7 @@ class LocationRepository(
     private val locationManager: LocationManager?,
     private val executor: Executor? = null
 ) {
+
 
     @SuppressLint("MissingPermission")
     fun getLocationLM(
