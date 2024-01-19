@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "cl.jam.p2_evaluacion3"
-        minSdk = 30
+        minSdk = 28
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -80,6 +80,23 @@ dependencies {
 
     // Camera
     implementation("io.coil-kt:coil-compose:2.5.0")
+
+    // CameraX
+//    val cameraxVersion = "1.3.1"
+//    implementation("androidx.camera:camera-lifecycle:$cameraxVersion")
+//    implementation("androidx.camera:camera-video:$cameraxVersion")
+//    implementation("androidx.camera:camera-view:$cameraxVersion")
+//    implementation("androidx.camera:camera-extensions:$cameraxVersion")
+
+    // Accompanist
+    val accompanistPermissionsVersion = "'0.23.1"
+    implementation("com.google.accompanist:accompanist-permissions:0.23.1")
+
+//    implementation("androidx.activity:activity-compose:1.8.2")
+//    implementation("androidx.compose.foundation:foundation-layout:1.5.4")
+//    implementation("androidx.compose.material:material:1.5.4")
+//    implementation("androidx.compose.ui:ui-tooling:1.5.4")
+//    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
 
 
     testImplementation("junit:junit:4.13.2")

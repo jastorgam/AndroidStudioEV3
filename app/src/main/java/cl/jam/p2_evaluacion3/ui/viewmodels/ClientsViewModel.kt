@@ -18,20 +18,28 @@ import kotlinx.coroutines.launch
 
 class ClientsViewModel(val clientDao: ClientDao) : ViewModel() {
 
-    var clients by mutableStateOf(listOf<Client>())
+    var clientes by mutableStateOf(listOf<Client>())
 
-    suspend fun getClients(): List<Client> {
+    fun deleteTable() {
         viewModelScope.launch(Dispatchers.IO) {
-            clients = clientDao.getAll()
+            clientDao.deleteTable()
         }
-        return clients;
+        getClients()
     }
 
-    suspend fun addClient(client: Client) {
+
+    fun getClients(): List<Client> {
+        viewModelScope.launch(Dispatchers.IO) {
+            clientes = clientDao.getAll()
+        }
+        return clientes;
+    }
+
+    fun addClient(client: Client) {
         viewModelScope.launch(Dispatchers.IO) {
             clientDao.insert(client)
-            getClients()
         }
+        getClients()
     }
 
     companion object {

@@ -13,14 +13,14 @@ fun AppNavBar(
 ) {
     NavHost(
         navController = navController,
-        startDestination = "request"
+        startDestination = "login"
     ) {
-//        composable("login") {
-//            LoginAccountUI(
-//                navToRequest = { navController.navigate("request") }
-//            )
-//
-//        }
+        composable("login") {
+            LoginAccountUI(
+                navToRequest = { navController.navigate("request") }
+            )
+
+        }
         composable("request") {
             RequestAccountUI(
                 navToLogin = { navController.navigate("login") }

@@ -13,7 +13,12 @@ data class Client(
     var phone: String,
     var dniFront: String = "",
     var dniBack: String = "",
-    var lat: Int = 0,
-    var long: Int = 0,
+    var lat: Double = 0.0,
+    var lon: Double = 0.0,
     var creationDate: LocalDate = LocalDate.now()
-)
+) {
+    override fun toString(): String {
+        return "Client(id=$id, name='$name', birdDate=$birdDate, email='$email', phone='$phone', dniFront='$dniFront', " +
+                "dniBack='$dniBack', lat=$lat, long=$lon, creationDate=$creationDate)"
+    }
+}
